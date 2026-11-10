@@ -460,17 +460,37 @@ async function resetData() {
 
 // ----------------------------------------------------------------------- start
 
+window.addEventListener('error', (e) => set('Page error', 'bad', `${e.message} (${(e.filename || '').split('/').pop()}:${e.lineno})`));
+window.addEventListener('unhandledrejection', (e) => set('Page error', 'bad', 'unhandled: ' + errText(e.reason)));
+
 function start() {
   if (launch.themeParams) { try { applyTheme(JSON.parse(launch.themeParams)); } catch { /* ignore */ } }
 
   $('bot').value = setting('bot');
   $('botid').value = setting('botid');
-  $('save-setup').onclick = () => {
-    saveSetting('bot', $('bot').value.trim().replace(/^@/, ''));
-    saveSetting('botid', $('botid').value.trim());
-    set('Setup', 'ok', 'saved');
-    testLaunch();
+  const showSetup = () => {
+    const bot = setting('bot');
+    const id = setting('botid');
+    $('setup-status').textContent = bot
+      ? `Saved on this device: @${bot}${id ? ', bot ID set' : ', no bot ID'}.`
+      : 'Nothing saved yet.';
   };
+  showSetup();
+  $('save-setup').addEventListener('click', () => {
+    const bot = $('bot').value.trim().replace(/^@/, '');
+    saveSetting('bot', bot);
+    saveSetting('botid', $('botid').value.trim());
+    if (setting('bot') !== bot) {
+      $('setup-status').textContent = 'Could not save: this browser blocks local storage here.';
+      set('Setup', 'bad', 'localStorage write did not stick');
+      return;
+    }
+    showSetup();
+    $('setup-status').textContent += ' ✓';
+    set('Setup', 'ok', 'saved and read back');
+    post('web_app_trigger_haptic_feedback', { type: 'notification', notification_type: 'success' });
+    testLaunch();
+  });
   $('reopen-direct').onclick = () => reopen('direct link');
   $('reopen-main').onclick = () => reopen('main app');
   $('back').onclick = testBackButton;

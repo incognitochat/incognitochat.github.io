@@ -6,8 +6,8 @@
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Device tests</title>
-<link rel="stylesheet" href="spike.css">
-<script src="spike.js" defer></script>
+<link rel="stylesheet" href="spike.css?v=2">
+<script src="spike.js?v=2" defer></script>
 </head>
 <body>
 <main>
@@ -21,6 +21,7 @@
     <label>Bot username, without @ <input id="bot" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
     <label>Bot ID, the number before ":" in the token (optional, for the signature check) <input id="botid" inputmode="numeric" autocomplete="off"></label>
     <button id="save-setup">Save</button>
+    <p id="setup-status" class="muted" role="status"></p>
   </section>
 
   <section class="card">
