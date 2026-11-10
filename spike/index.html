@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://telegram.org https://spike-test.lambda-url.us-east-1.on.aws https://spike-test.lambda-url.eu-west-1.on.aws https://lambda.us-east-1.amazonaws.com https://lambda.eu-west-1.amazonaws.com https://lambda.eu-central-1.amazonaws.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Device tests</title>
+<link rel="stylesheet" href="spike.css">
+<script src="spike.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Device tests</h1>
+    <p class="muted">Temporary test page for v2. It stores only test keys on this device and sends nothing anywhere.</p>
+  </header>
+
+  <section id="setup" class="card">
+    <h2>Setup (once per device)</h2>
+    <label>Bot username, without @ <input id="bot" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <label>Bot ID, the number before ":" in the token (optional, for the signature check) <input id="botid" inputmode="numeric" autocomplete="off"></label>
+    <button id="save-setup">Save</button>
+  </section>
+
+  <section class="card">
+    <h2>Results</h2>
+    <ul id="results"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Manual tests</h2>
+    <div class="row"><button id="reopen-direct">Reopen with reg code (direct link)</button><button id="reopen-main">Reopen with reg code (main app)</button></div>
+    <div class="row"><button id="back">Show back button, then press it</button><button id="write">Request write access</button></div>
+    <div class="row"><button id="fullscreen">Fullscreen</button><button id="haptic">Haptic tap</button><button id="camera">Camera</button></div>
+    <video id="video" playsinline muted hidden></video>
+    <label>Keyboard test: tap here and type <textarea id="kbd" rows="2"></textarea></label>
+    <div class="row"><button id="network">Network checks</button><button id="close">Close app</button></div>
+  </section>
+
+  <section class="card">
+    <h2>Report</h2>
+    <p class="muted">Contains no Telegram ID or name.</p>
+    <div class="row"><button id="copy">Copy report</button><button id="reset" class="danger">Reset test data</button></div>
+    <textarea id="report" rows="8" readonly hidden></textarea>
+  </section>
+
+  <section class="card">
+    <h2>Bridge log</h2>
+    <pre id="log"></pre>
+  </section>
+</main>
+</body>
+</html>
