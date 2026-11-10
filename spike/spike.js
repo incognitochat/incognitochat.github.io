@@ -325,7 +325,7 @@ async function testLaunch() {
   }
 }
 
-function reopen(via) {
+function reopen(via, closeAfter) {
   const bot = setting('bot');
   if (!bot) { set('Reopen with reg code', 'bad', 'enter the bot username in Setup first'); return; }
   const code = 'reg' + b64url(crypto.getRandomValues(new Uint8Array(32)));
@@ -334,6 +334,10 @@ function reopen(via) {
   const path = via === 'direct link' ? `/${bot}/app?startapp=${code}` : `/${bot}?startapp=${code}`;
   set('Reopen with reg code', 'wait', `asked Telegram to open ${via} (${path.length} chars); if nothing happens, that's a FAIL`);
   post('web_app_open_tg_link', { path_full: path });
+  if (closeAfter) {
+    saveSetting('expected-reg-via', via + ', old copy closed');
+    setTimeout(() => post('web_app_close'), 400);
+  }
 }
 
 function testBackButton() {
@@ -493,6 +497,7 @@ function start() {
   });
   $('reopen-direct').onclick = () => reopen('direct link');
   $('reopen-main').onclick = () => reopen('main app');
+  $('reopen-close').onclick = () => reopen('direct link', true);
   $('back').onclick = testBackButton;
   $('write').onclick = testWriteAccess;
   $('fullscreen').onclick = testFullscreen;
